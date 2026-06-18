@@ -673,7 +673,7 @@ function toast(msg){
    One-time setup: follow the setup guide provided, then paste
    your Google Apps Script Web App URL below (keep single quotes)
    ================================================================ */
-var SHEET_URL='https://script.google.com/macros/s/AKfycbyMnyHdDnz2dQZw6fH4SIYWz8AlryVFWrlnhKPpPrMC7mN7-F7PRg9NIi9VRlbcdU-FCA/exec';
+var SHEET_URL='PASTE_YOUR_SCRIPT_URL_HERE';
 
 function logSession(type){
   if(!SHEET_URL||SHEET_URL==='PASTE_YOUR_SCRIPT_URL_HERE') return;
@@ -697,13 +697,14 @@ function logSession(type){
       tier:          G.tier||G.compTier||'',
       annual_pot:    G.annualPot?'Rs '+Math.round(parseFloat(G.annualPot)/100000)+' lakh':'--'
     };
-    var json=JSON.stringify(payload);
-    var blob=new Blob([json],{type:'text/plain'});
-    if(navigator.sendBeacon){
-      navigator.sendBeacon(SHEET_URL,blob);
-    } else {
-      fetch(SHEET_URL,{method:'POST',body:json,mode:'no-cors'}).catch(function(){});
-    }
+    // Build query string — GET request bypasses CORS completely
+    var qs=Object.keys(payload).map(function(k){
+      return encodeURIComponent(k)+'='+encodeURIComponent(payload[k]);
+    }).join('&');
+    var img=new Image();
+    img.src=SHEET_URL+'?'+qs;
+    // Also try fetch as backup
+    fetch(SHEET_URL+'?'+qs,{method:'GET',mode:'no-cors'}).catch(function(){});
   }catch(e){}
 }
 
