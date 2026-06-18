@@ -1,1 +1,840 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Berger Paints — Dealer Pitch Builder</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f5f5f5;color:#1a1a1a;min-height:100vh;}
+.wrap{padding:1rem;max-width:500px;margin:0 auto;}
+.logo-bar{display:flex;align-items:center;gap:10px;margin-bottom:1.5rem;padding-top:.5rem;}
+.logo-pill{background:#e8000d;color:#fff;font-size:13px;font-weight:600;padding:5px 16px;border-radius:20px;}
+.logo-sub{font-size:11px;color:#666;}
+.card{background:#fff;border:1px solid #e8e8e8;border-radius:12px;padding:1.25rem;}
+.lock-icon{width:52px;height:52px;background:#fde8e8;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:24px;}
+.login-title{font-size:16px;font-weight:600;color:#1a1a1a;margin-bottom:6px;text-align:center;}
+.login-sub{font-size:13px;color:#666;margin-bottom:1.25rem;line-height:1.5;text-align:center;}
+.field{margin-bottom:12px;}
+.field label{font-size:13px;color:#555;display:block;margin-bottom:4px;font-weight:500;}
+.field input,.field select{width:100%;font-size:14px;padding:9px 11px;border:1px solid #ddd;border-radius:8px;background:#fff;color:#1a1a1a;-webkit-appearance:none;appearance:none;}
+.field input:focus,.field select:focus{outline:none;border-color:#e8000d;}
+.err{font-size:12px;color:#e8000d;margin-top:6px;display:none;padding:6px 10px;background:#fff0f0;border-radius:6px;}
+.btn-red{width:100%;margin-top:.5rem;padding:12px;background:#e8000d;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;}
+.btn-outline{background:#fff;border:1px solid #ddd;color:#555;width:100%;padding:10px;border-radius:8px;font-size:13px;cursor:pointer;margin-top:8px;}
+.user-bar{display:flex;align-items:center;justify-content:space-between;background:#fff;border:1px solid #e8e8e8;border-radius:8px;padding:9px 13px;margin-bottom:1rem;}
+.user-name{font-size:13px;font-weight:600;color:#1a1a1a;}
+.user-info{font-size:11px;color:#888;margin-top:1px;}
+.logout-btn{font-size:12px;color:#e8000d;background:none;border:none;cursor:pointer;font-weight:500;}
+.slabel{font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.7px;margin-bottom:8px;margin-top:1.25rem;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.form-title{font-size:17px;font-weight:600;color:#1a1a1a;margin-bottom:4px;}
+.form-sub{font-size:13px;color:#666;margin-bottom:1.25rem;}
+.mode-selector{display:flex;border:1px solid #e0e0e0;border-radius:10px;overflow:hidden;margin-bottom:1.25rem;}
+.mode-btn{flex:1;padding:11px 8px;font-size:13px;font-weight:600;text-align:center;background:#f5f5f5;color:#888;cursor:pointer;border:none;line-height:1.3;}
+.mode-btn:first-child{border-right:1px solid #e0e0e0;}
+.mode-btn.active{background:#e8000d;color:#fff;}
+.dheader{background:#f9f9f9;border:1px solid #e8e8e8;border-radius:12px;padding:1rem;margin-bottom:1rem;}
+.dname{font-size:16px;font-weight:600;color:#1a1a1a;}
+.dmeta{font-size:12px;color:#888;margin-top:4px;line-height:1.7;}
+.tabs{display:flex;border:1px solid #e0e0e0;border-radius:8px;overflow:hidden;margin-bottom:1rem;background:#f5f5f5;}
+.tab{flex:1;padding:9px 2px;font-size:11px;text-align:center;background:transparent;color:#888;cursor:pointer;border:none;border-right:1px solid #e0e0e0;line-height:1.3;font-weight:500;}
+.tab:last-child{border-right:none;}
+.tab.active{background:#e8000d;color:#fff;font-weight:600;}
+.pane{display:none;}
+.pane.active{display:block;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem;}
+.mccard{background:#f9f9f9;border-radius:8px;padding:12px;border:1px solid #ececec;}
+.mclabel{font-size:11px;color:#888;margin-bottom:4px;font-weight:500;}
+.mcval{font-size:19px;font-weight:600;color:#1a1a1a;}
+.mcsub{font-size:11px;color:#888;margin-top:2px;}
+.potcard{border-radius:12px;border:1px solid #e8e8e8;background:#fff;padding:1rem;margin-bottom:10px;}
+.pottitle{font-size:12px;color:#888;margin-bottom:4px;font-weight:500;}
+.potval{font-size:22px;font-weight:600;color:#1a1a1a;}
+.potnote{font-size:11px;color:#888;margin-top:3px;line-height:1.5;}
+.totalcard{background:#e8000d;border-radius:12px;padding:1rem;margin-bottom:10px;}
+.totallabel{font-size:12px;color:rgba(255,255,255,.85);font-weight:500;}
+.totalval{font-size:28px;font-weight:700;color:#fff;margin-top:2px;}
+.totalnote{font-size:11px;color:rgba(255,255,255,.75);margin-top:2px;}
+.anncard{border-radius:12px;border:2px solid #e8000d;padding:1rem;margin-bottom:1rem;background:#fff;}
+.annlabel{font-size:12px;color:#e8000d;font-weight:600;}
+.annval{font-size:22px;font-weight:600;color:#1a1a1a;margin-top:2px;}
+.annnote{font-size:11px;color:#888;margin-top:2px;}
+.tag-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1rem;margin-top:4px;}
+.tag{font-size:12px;padding:5px 11px;border-radius:20px;background:#f5f5f5;border:1px solid #e0e0e0;color:#555;font-weight:500;}
+.pain-banner{background:#fff8f8;border:1px solid #fcc;border-radius:12px;padding:1rem;margin-bottom:1rem;}
+.pain-title{font-size:13px;font-weight:600;color:#c0392b;margin-bottom:10px;}
+.pain-item{display:flex;gap:9px;align-items:flex-start;margin-bottom:9px;}
+.pain-item:last-child{margin-bottom:0;}
+.pdot{width:7px;height:7px;min-width:7px;border-radius:50%;background:#e8000d;margin-top:4px;}
+.ptext{font-size:12px;color:#555;line-height:1.6;}
+.ptext strong{color:#1a1a1a;font-weight:600;}
+.solution-banner{background:#f6fff8;border:1px solid #b2dfdb;border-radius:12px;padding:1rem;margin-bottom:1rem;}
+.solution-title{font-size:13px;font-weight:600;color:#1b6b3a;margin-bottom:10px;}
+.solution-item{display:flex;gap:9px;align-items:flex-start;margin-bottom:9px;}
+.solution-item:last-child{margin-bottom:0;}
+.sdot{width:7px;height:7px;min-width:7px;border-radius:50%;background:#27ae60;margin-top:4px;}
+.stext{font-size:12px;color:#555;line-height:1.6;}
+.stext strong{color:#1a1a1a;font-weight:600;}
+.bitem{display:flex;gap:10px;align-items:flex-start;padding:11px 0;border-bottom:1px solid #f0f0f0;}
+.bitem:last-child{border-bottom:none;}
+.bicon{width:32px;height:32px;min-width:32px;border-radius:50%;background:#fde8e8;display:flex;align-items:center;justify-content:center;font-size:14px;color:#e8000d;font-weight:600;}
+.btitle{font-size:13px;font-weight:600;color:#1a1a1a;}
+.bdesc{font-size:12px;color:#666;margin-top:3px;line-height:1.55;}
+.bsrc{font-size:10px;color:#aaa;font-style:italic;margin-top:3px;}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem;}
+.stat-card{background:#f9f9f9;border-radius:8px;padding:13px;border:1px solid #ececec;text-align:center;}
+.stat-num{font-size:21px;font-weight:700;color:#e8000d;}
+.stat-label{font-size:11px;color:#888;margin-top:3px;line-height:1.4;font-weight:500;}
+.stat-src{font-size:10px;color:#aaa;font-style:italic;margin-top:2px;}
+.prog-item{background:#f9f9f9;border-radius:8px;padding:11px 13px;margin-bottom:8px;border:1px solid #ececec;}
+.prog-name{font-size:13px;font-weight:600;color:#1a1a1a;}
+.prog-for{font-size:11px;color:#e8000d;margin-top:1px;font-weight:500;}
+.prog-desc{font-size:12px;color:#666;margin-top:5px;line-height:1.5;}
+.bbox{background:#f9f9f9;border:1px solid #e8e8e8;border-radius:12px;padding:1rem;margin-bottom:12px;}
+.bbox h3{font-size:13px;font-weight:600;color:#1a1a1a;margin-bottom:10px;}
+.frow{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #efefef;font-size:13px;}
+.frow:last-child{border-bottom:none;}
+.frow span{color:#666;}
+.frow strong{color:#1a1a1a;font-weight:600;}
+.fhi{background:rgba(232,0,13,.07);border-radius:6px;padding:8px 11px;display:flex;justify-content:space-between;align-items:center;font-size:13px;margin-top:8px;}
+.fhi span{color:#666;}
+.fhi strong{color:#e8000d;font-weight:600;}
+.fhi-total{background:#e8000d;border-radius:8px;padding:9px 11px;display:flex;justify-content:space-between;align-items:center;font-size:14px;margin-top:8px;}
+.fhi-total span{color:rgba(255,255,255,.85);}
+.fhi-total strong{color:#fff;font-weight:700;}
+.cli{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid #efefef;font-size:13px;}
+.cli:last-child{border-bottom:none;}
+.cldot{width:7px;height:7px;min-width:7px;border-radius:50%;background:#e8000d;}
+.clname{color:#1a1a1a;font-weight:500;flex:1;}
+.clnote{font-size:11px;color:#888;font-style:italic;}
+.notebox{background:#f9f9f9;border-left:3px solid #e8000d;padding:9px 13px;border-radius:0 8px 8px 0;font-size:12px;color:#888;margin-top:10px;line-height:1.6;}
+.share-row{display:flex;gap:8px;margin-top:1rem;}
+.share-btn{flex:1;padding:11px 4px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:none;text-align:center;}
+.share-wa{background:#25d366;color:#fff;}
+.share-copy{background:#fff;border:1px solid #ddd;color:#1a1a1a;}
+.share-pdf{background:#e8000d;color:#fff;}
+/* USAGE REPORT TAB */
+.report-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;}
+.report-title{font-size:15px;font-weight:600;color:#1a1a1a;}
+.btn-dl{background:#e8000d;color:#fff;border:none;padding:8px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;}
+.report-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:1rem;}
+.rs-card{background:#f9f9f9;border:1px solid #ececec;border-radius:8px;padding:10px;text-align:center;}
+.rs-num{font-size:20px;font-weight:700;color:#e8000d;}
+.rs-label{font-size:10px;color:#888;margin-top:2px;font-weight:500;}
+.log-table{width:100%;border-collapse:collapse;font-size:11px;}
+.log-table th{text-align:left;padding:7px 6px;border-bottom:2px solid #e8e8e8;color:#888;font-weight:600;text-transform:uppercase;font-size:10px;letter-spacing:.4px;}
+.log-table td{padding:7px 6px;border-bottom:1px solid #f0f0f0;color:#555;vertical-align:top;}
+.log-table tr:last-child td{border-bottom:none;}
+.empty-report{text-align:center;padding:2rem 1rem;color:#aaa;font-size:13px;}
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:#222;color:#fff;font-size:13px;padding:9px 20px;border-radius:22px;opacity:0;pointer-events:none;transition:opacity .3s;z-index:999;white-space:nowrap;}
+.toast.show{opacity:1;}
+.footer-note{font-size:11px;color:#aaa;text-align:center;margin-top:14px;line-height:1.6;}
+.turnover-info{background:#fff8e8;border:1px solid #ffe0a0;border-radius:8px;padding:8px 12px;font-size:12px;color:#8a6000;margin-bottom:12px;display:none;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="logo-bar">
+    <div class="logo-pill">BERGER</div>
+    <div class="logo-sub">Dealer Conversion Pitch Builder</div>
+  </div>
+
+  <!-- LOGIN -->
+  <div id="login-view">
+    <div class="card">
+      <div class="lock-icon">&#128274;</div>
+      <div class="login-title">Berger employees only</div>
+      <div class="login-sub">Enter your official Berger email address to access the pitch builder.</div>
+      <div class="field"><label>Berger email address</label><input type="email" id="login-email" placeholder="yourname@bergerindia.com" onkeydown="if(event.key==='Enter')doLogin()"></div>
+      <div class="field"><label>Your full name</label><input type="text" id="login-name" placeholder="e.g. Rahul Sharma"></div>
+      <div class="row2">
+        <div class="field"><label>Employee ID</label><input type="text" id="login-empid" placeholder="e.g. BIL-12345"></div>
+        <div class="field"><label>TTY Code</label><input type="text" id="login-tty" placeholder="e.g. TTY-001"></div>
+      </div>
+      <div class="field"><label>Depot name</label><input type="text" id="login-depot" placeholder="e.g. Pune Central Depot"></div>
+      <div class="err" id="login-err">Please enter a valid Berger email address (must end in @bergerindia.com)</div>
+      <button class="btn-red" onclick="doLogin()">Access pitch builder</button>
+    </div>
+    <p class="footer-note">Restricted to Berger Paints employees only.<br>For access issues, contact your territory manager.</p>
+  </div>
+
+  <!-- APP -->
+  <div id="app-view" style="display:none;">
+    <div class="user-bar">
+      <div><div class="user-name" id="udname">&#8212;</div><div class="user-info" id="udemail">&#8212;</div></div>
+      <button class="logout-btn" onclick="doLogout()">Log out</button>
+    </div>
+
+    <!-- FORM -->
+    <div id="form-view">
+      <div class="form-title">Build your pitch proposal</div>
+      <div class="form-sub">Select dealer category and fill in the details to generate a personalised Berger pitch.</div>
+      <div class="slabel">Dealer category</div>
+      <div class="mode-selector">
+        <button class="mode-btn active" id="mode-adc" onclick="setMode('adc')">ADC dealer<br><span style="font-size:10px;font-weight:400;">(Cement / Tile / Steel)</span></button>
+        <button class="mode-btn" id="mode-comp" onclick="setMode('comp')">Competition paint dealer<br><span style="font-size:10px;font-weight:400;">(Asian / Nerolac / Akzo / Opus)</span></button>
+      </div>
+
+      <!-- ADC FIELDS -->
+      <div id="adc-fields">
+        <div class="slabel">Dealer profile</div>
+        <div class="field"><label>Dealer / firm name</label><input type="text" id="dname" placeholder="e.g. Ramesh Building Materials"></div>
+        <div class="row2">
+          <div class="field"><label>Dealer type</label>
+            <select id="dtype" onchange="updateVolLabel()">
+              <option value="cement">Cement dealer</option>
+              <option value="tile">Tile dealer</option>
+              <option value="steel">Steel dealer</option>
+            </select>
+          </div>
+          <div class="field"><label>City / town</label><input type="text" id="dcity" placeholder="e.g. Pune"></div>
+        </div>
+        <div class="row2">
+          <div class="field"><label>Store size</label>
+            <select id="dsize">
+              <option value="Small">Small (&lt;500 sqft)</option>
+              <option value="Medium" selected>Medium (500-1500 sqft)</option>
+              <option value="Large">Large (&gt;1500 sqft)</option>
+            </select>
+          </div>
+          <div class="field"><label>Location tier</label>
+            <select id="dtier">
+              <option value="Metro">Metro</option>
+              <option value="Tier 2" selected>Tier 2</option>
+              <option value="Tier 3 / Rural">Tier 3 / Rural</option>
+            </select>
+          </div>
+        </div>
+        <div class="slabel">Sales &amp; footfall data</div>
+        <div class="row2">
+          <div class="field"><label id="vol-label">Monthly cement sales (tons)</label><input type="number" id="vol" placeholder="e.g. 100" min="0"></div>
+          <div class="field"><label>Daily footfall (customers/day)</label><input type="number" id="footfall" placeholder="e.g. 40" min="0"></div>
+        </div>
+        <div class="row2">
+          <div class="field"><label>Monthly turnover (Rs lakh)</label><input type="number" id="turnover" placeholder="e.g. 15" min="0" step="0.1"></div>
+          <div class="field"><label>Existing product mix</label>
+            <select id="pmix">
+              <option value="Single category">Single category</option>
+              <option value="2 categories" selected>2 categories</option>
+              <option value="3+ categories">3+ categories</option>
+              <option value="Full building materials">Full building materials</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn-red" onclick="calculateADC()">Generate pitch proposal</button>
+      </div>
+
+      <!-- COMP FIELDS -->
+      <div id="comp-fields" style="display:none;">
+        <div class="slabel">Dealer profile</div>
+        <div class="field"><label>Dealer / firm name</label><input type="text" id="cname" placeholder="e.g. Sharma Paints &amp; Hardware"></div>
+        <div class="row2">
+          <div class="field"><label>Current paint brand</label>
+            <select id="cbrand" onchange="onBrandChange()">
+              <option value="asian">Asian Paints</option>
+              <option value="nerolac">Nerolac</option>
+              <option value="akzo">Akzo Nobel (Dulux)</option>
+              <option value="opus">Opus (Birla)</option>
+            </select>
+          </div>
+          <div class="field"><label>City / town</label><input type="text" id="ccity" placeholder="e.g. Pune"></div>
+        </div>
+        <!-- Asian turnover bucket — shown only for Asian -->
+        <div id="asian-turnover-wrap" class="field">
+          <label>Annual turnover bracket</label>
+          <select id="asian-bucket">
+            <option value="lt1cr">Less than Rs 1 Crore</option>
+            <option value="1to3cr">Rs 1 Crore to Rs 3 Crore</option>
+            <option value="3to6cr">Rs 3 Crore to Rs 6 Crore</option>
+            <option value="gt6cr">Greater than Rs 6 Crore</option>
+          </select>
+          <div class="turnover-info" id="asian-bucket-info">Pitch points will be customised based on this turnover bracket.</div>
+        </div>
+        <div class="row2">
+          <div class="field"><label>Monthly turnover (Rs lakh)</label><input type="number" id="cturnover" placeholder="e.g. 20" min="0" step="0.1"></div>
+          <div class="field"><label>Location tier</label>
+            <select id="ctier">
+              <option value="Metro">Metro</option>
+              <option value="Tier 2" selected>Tier 2</option>
+              <option value="Tier 3 / Rural">Tier 3 / Rural</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn-red" onclick="calculateComp()">Generate pitch proposal</button>
+      </div>
+    </div>
+
+    <!-- OUTPUT -->
+    <div id="output" style="display:none;">
+      <div class="dheader">
+        <div class="dname" id="out-name">&#8212;</div>
+        <div class="dmeta" id="out-meta">&#8212;</div>
+      </div>
+      <div id="tabs-adc" class="tabs">
+        <button class="tab active" onclick="sw('potential',this,'adc')">Potential</button>
+        <button class="tab" onclick="sw('pitch',this,'adc')">Your pitch</button>
+        <button class="tab" onclick="sw('berger-adc',this,'adc')">Why Berger</button>
+        <button class="tab" onclick="sw('backend',this,'adc')">Workings</button>
+      </div>
+      <div id="tabs-comp" class="tabs" style="display:none;">
+        <button class="tab active" onclick="sw('comp-pitch',this,'comp')">Their challenges</button>
+        <button class="tab" onclick="sw('berger-comp',this,'comp')">Why Berger</button>
+      </div>
+
+      <!-- ADC: POTENTIAL -->
+      <div class="pane active" id="pane-potential">
+        <div class="grid2">
+          <div class="mccard"><div class="mclabel" id="vol-ml">Cement sold/month</div><div class="mcval" id="m-vol">&#8212;</div><div class="mcsub" id="m-volu">tons</div></div>
+          <div class="mccard"><div class="mclabel">Carpet area (est.)</div><div class="mcval" id="m-sqft">&#8212;</div><div class="mcsub">sq ft / month</div></div>
+        </div>
+        <div class="potcard"><div class="pottitle">New construction sites — paint potential</div><div class="potval" id="m-np">&#8212;</div><div class="potnote" id="m-npn">&#8212;</div></div>
+        <div class="potcard"><div class="pottitle">Repainting market potential</div><div class="potval" id="m-rp">&#8212;</div><div class="potnote">25% of new construction potential — active repainting demand in dealer's local market</div></div>
+        <div class="totalcard"><div class="totallabel">Total paint business potential / month</div><div class="totalval" id="m-tot">&#8212;</div><div class="totalnote">New construction + repainting combined</div></div>
+        <div class="anncard"><div class="annlabel">Annual paint business opportunity</div><div class="annval" id="m-ann">&#8212;</div><div class="annnote">Monthly total x 12 months</div></div>
+        <div class="slabel">Products covered in Rs 52 / sq ft of carpet area</div>
+        <div class="tag-row">
+          <span class="tag">Interior emulsion</span>
+          <span class="tag">Exterior paint</span>
+          <span class="tag">Wall putty</span>
+          <span class="tag">Terrace waterproofing</span>
+          <span class="tag">Bathroom waterproofing</span>
+          <span class="tag">Wall waterproofing *</span>
+          <span class="tag">Tile adhesive</span>
+          <span class="tag">Tile grout</span>
+        </div>
+        <div style="font-size:11px;color:#888;margin-top:-6px;margin-bottom:1rem;line-height:1.6;">* Wall waterproofing applicable for repainting projects where existing seepage or dampness is identified.</div>
+      </div>
+
+      <!-- ADC: PITCH -->
+      <div class="pane" id="pane-pitch"><div id="pitch-content"></div></div>
+
+      <!-- ADC: WHY BERGER -->
+      <div class="pane" id="pane-berger-adc"></div>
+
+      <!-- ADC: WORKINGS -->
+      <div class="pane" id="pane-backend">
+        <div class="bbox"><h3 id="be-t1">Step 1 — Volume to carpet area</h3>
+          <div class="frow"><span>Industry yield</span><strong id="be-y">&#8212;</strong></div>
+          <div class="frow"><span>Midpoint used</span><strong id="be-m">&#8212;</strong></div>
+          <div class="frow"><span>Monthly volume entered</span><strong id="be-v">&#8212;</strong></div>
+          <div class="fhi"><span>Estimated carpet area / month</span><strong id="be-c">&#8212;</strong></div>
+        </div>
+        <div class="bbox"><h3>Step 2 — Products included in Rs 52 / sq ft</h3>
+          <div style="margin-top:6px;">
+            <div class="cli"><div class="cldot"></div><div class="clname">Wall putty</div></div>
+            <div class="cli"><div class="cldot"></div><div class="clname">Interior emulsion paint</div></div>
+            <div class="cli"><div class="cldot"></div><div class="clname">Exterior paint</div></div>
+            <div class="cli"><div class="cldot"></div><div class="clname">Terrace waterproofing</div></div>
+            <div class="cli"><div class="cldot"></div><div class="clname">Bathroom waterproofing</div></div>
+            <div class="cli"><div class="cldot"></div><div class="clname">Wall waterproofing *</div><div class="clnote">repainting projects</div></div>
+            <div class="cli"><div class="cldot"></div><div class="clname">Tile adhesive</div></div>
+            <div class="cli"><div class="cldot"></div><div class="clname">Tile grout</div></div>
+          </div>
+          <div class="fhi-total"><span>All-in rate per carpet sq ft</span><strong>Rs 52</strong></div>
+          <div style="font-size:10px;color:#888;margin-top:6px;font-style:italic;">* Wall waterproofing applicable where seepage or dampness is present in repainting projects.</div>
+        </div>
+        <div class="bbox"><h3>Step 3 — New construction paint potential</h3>
+          <div class="frow"><span>Carpet area / month</span><strong id="be-c2">&#8212;</strong></div>
+          <div class="frow"><span>Rate applied</span><strong>Rs 52 per carpet sq ft</strong></div>
+          <div class="fhi"><span>New construction potential</span><strong id="be-np">&#8212;</strong></div>
+        </div>
+        <div class="bbox"><h3>Step 4 — Repainting potential</h3>
+          <div class="frow"><span>Basis</span><strong>Active repainting demand in market</strong></div>
+          <div class="frow"><span>Repainting cycle</span><strong>Every 5-7 years per property</strong></div>
+          <div class="frow"><span>Multiplier applied</span><strong>25% of new construction value</strong></div>
+          <div class="frow"><span>New construction potential</span><strong id="be-nr">&#8212;</strong></div>
+          <div class="fhi"><span>Repainting potential</span><strong id="be-rp">&#8212;</strong></div>
+        </div>
+        <div class="bbox"><h3>Step 5 — Total summary</h3>
+          <div class="frow"><span>New construction potential</span><strong id="be-n2">&#8212;</strong></div>
+          <div class="frow"><span>Repainting potential</span><strong id="be-r2">&#8212;</strong></div>
+          <div class="fhi"><span>Monthly total</span><strong id="be-tot">&#8212;</strong></div>
+          <div class="fhi" style="margin-top:6px;"><span>Annual opportunity (x12)</span><strong id="be-ann">&#8212;</strong></div>
+        </div>
+        <div class="notebox">Calculations based on standard building material industry ratios and Berger pricing benchmarks. Actual potential may vary by market conditions and product mix.</div>
+      </div>
+
+      <!-- COMP PANES -->
+      <div class="pane" id="pane-comp-pitch"><div id="comp-pitch-content"></div></div>
+      <div class="pane" id="pane-berger-comp"></div>
+
+      <div class="share-row">
+        <button class="share-btn share-wa" onclick="shareWA()">WhatsApp</button>
+        <button class="share-btn share-copy" onclick="copyTxt()">Copy text</button>
+        <button class="share-btn share-pdf" onclick="savePDF()">Save PDF</button>
+      </div>
+      <button class="btn-outline" onclick="goBack()">&#8592; Edit dealer details</button>
+    </div>
+
+    <!-- END OUTPUT -->
+    </div>
+
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+var G={};
+var MODE='adc';
+var USAGE_LOG=[];
+
+/* ---- WHY BERGER HTML (shared) ---- */
+var WHY_BERGER_HTML=`
+<div class="slabel">Berger at a glance</div>
+<div class="stat-grid">
+  <div class="stat-card"><div class="stat-num">100+</div><div class="stat-label">Years of legacy in India</div><div class="stat-src">*bergerpaints.com</div></div>
+  <div class="stat-card"><div class="stat-num">#2</div><div class="stat-label">Largest paint company in India</div><div class="stat-src">*bergerpaints.com</div></div>
+  <div class="stat-card"><div class="stat-num">#4</div><div class="stat-label">Largest in Asia</div><div class="stat-src">*bergerpaints.com</div></div>
+  <div class="stat-card"><div class="stat-num">#7</div><div class="stat-label">Decorative paints globally</div><div class="stat-src">*bergerpaints.com</div></div>
+  <div class="stat-card"><div class="stat-num">#3</div><div class="stat-label">Construction chemicals in India</div><div class="stat-src">*bergerpaints.com</div></div>
+  <div class="stat-card"><div class="stat-num">CAGR+</div><div class="stat-label">Consistent positive growth YoY</div><div class="stat-src">*Berger annual reports</div></div>
+</div>
+<div class="slabel">Berger advantage</div>
+<div class="bitem"><div class="bicon">&#8377;</div><div><div class="btitle">Among the highest dealer margins in the industry</div><div class="bdesc">Berger offers significantly higher dealer margins than the industry average, backed by aggressive seasonal trade schemes — ensuring your investment in the Berger partnership consistently delivers superior returns.</div></div></div>
+<div class="bitem"><div class="bicon">&#128197;</div><div><div class="btitle">Best-in-industry credit line</div><div class="bdesc">Berger's credit terms are among the most competitive in the paint industry — giving you the working capital flexibility to grow your business, stock the right products, and maximise every selling opportunity.</div></div></div>
+<div class="bitem"><div class="bicon">&#9733;</div><div><div class="btitle">India's most innovative paint company</div><div class="bdesc">A pioneer in Easy Clean stain-resistant paint, Anti Dust technology, PU Enamel, and Express Painting services — Berger brings high-demand, category-leading products that command premium pricing and create genuine pull at your counter.</div><div class="bsrc">*bergerpaints.com product portfolio</div></div></div>
+<div class="bitem"><div class="bicon">&#9646;</div><div><div class="btitle">CB Machine</div><div class="bdesc">Berger installs a CB Machine at your store — elevating your counter's appeal, attracting new walk-in customers, and enabling personalised colour solutions that no unassisted counter can offer. Comes with a refund scheme (confirm eligibility with your Berger manager).</div></div></div>
+<div class="bitem"><div class="bicon">&#9881;</div><div><div class="btitle">Express Painting service</div><div class="bdesc">As a Berger dealer, you gain access to Berger's tech-enabled Express Painting service — allowing you to offer end-to-end painting solutions to your customers, earn referral income, and build long-term loyalty that extends well beyond a single transaction.</div></div></div>
+<div class="bitem"><div class="bicon">&#9670;</div><div><div class="btitle">Field sales support across key verticals</div><div class="bdesc">Berger extends structured field sales support across key verticals — Wood Coating, Projects, and Influencer Management (architects, engineers, and interior designers) — to generate consistent market demand and ensure your counter benefits from organised, company-led business development.</div></div></div>
+<div class="slabel">Industry-benchmark loyalty programs</div>
+<div class="prog-item"><div class="prog-name">Lift &amp; Win</div><div class="prog-for">For painters &amp; contractors</div><div class="prog-desc">A powerful sell-out and rewards program that motivates on-ground applicators — creating consistent secondary demand pull that directly benefits your counter's throughput and sales velocity.</div></div>
+<div class="prog-item"><div class="prog-name">Inspiration Club</div><div class="prog-for">For architects, engineers &amp; interior designers</div><div class="prog-desc">Berger's premium influencer engagement program — building specification preference among the most influential purchase decision-makers in your market, generating high-value project business for your counter.</div></div>
+<div class="prog-item"><div class="prog-name">Insignia Club</div><div class="prog-for">For wood applicators</div><div class="prog-desc">An exclusive loyalty platform for wood coating applicators — reinforcing Berger's leadership in the premium wood finish segment and driving repeat business through a highly motivated specialist network.</div></div>
+<div class="prog-item"><div class="prog-name">Legend Circle</div><div class="prog-for">For waterproofing contractors</div><div class="prog-desc">India's only structured loyalty program purpose-built for waterproofing specialists — creating a committed contractor network that generates consistent, high-margin waterproofing demand at your counter.</div></div>
+`;
+
+/* ---- ADC PITCH DATA ---- */
+var ADC_PITCH={
+  cement:{
+    pains:[
+      {t:"Structural margin pressure driven by competitive dynamics",d:"Aditya Birla's entry into paints through Opus gives Ultratech cement dealers a built-in advantage — they can absorb cement margin cuts and recover profitability through paint. Non-Ultratech dealers who do not add paint to their portfolio are competing on an uneven playing field."},
+      {t:"Cement is a single-purchase category with no repeat cycle",d:"Once a builder completes their construction, the cement purchase ends. You carry the full cost of the customer relationship but benefit from only one transaction — with no natural pathway to repeat business."},
+      {t:"Industry-wide squeeze on cement dealer profitability",d:"Rising input costs and aggressive competitive pricing continue to compress cement dealer margins. Diversifying into a high-margin, fast-moving product category is no longer a growth option — it is a business necessity."},
+      {t:"Over-dependence on the construction cycle",d:"A business built solely on cement is entirely exposed to macro construction slowdowns — seasonal, cyclical, or policy-driven. Adding paint creates a revenue buffer and reduces your vulnerability to factors outside your control."}
+    ],
+    solutions:[
+      {t:"Every cement customer you serve is a guaranteed paint buyer",d:"Every builder, contractor, and homeowner who purchases cement from you will eventually paint that structure. The relationship is already built — Berger helps you monetise it by converting that trust into a long-term, recurring revenue stream."},
+      {t:"Paint delivers what cement structurally cannot — recurring income",d:"Paint is repurchased every 5 to 7 years per property. A customer base that was transactional becomes a base of loyal, returning buyers — generating consistent income that cement, by its nature, can never provide."},
+      {t:"Strengthen your competitive position with Berger's superior economics",d:"Berger offers stronger dealer margins and best-in-industry credit terms — enabling you to match any competitive pricing pressure on cement while building a more profitable second revenue line through paint."},
+      {t:"Capture the complete wallet share of every customer you already serve",d:"Today, your customers buy cement from you and paint from someone else. Berger brings both under your roof — significantly increasing revenue per customer without a single rupee spent on new acquisition."}
+    ]
+  },
+  tile:{
+    pains:[
+      {t:"Tiles are a low-frequency, one-time transaction category",d:"A customer retiles their home once in many years. Despite the effort invested in building that relationship, the transaction frequency is structurally too low to sustain meaningful revenue growth from tiles alone."},
+      {t:"A saturated market where price is the only differentiator",d:"The tile category is intensely competitive across every price point. Eroding margins, low customer stickiness, and price-driven purchasing decisions make it increasingly difficult to build a profitable, sustainable business on tiles alone."},
+      {t:"Limited opportunities to grow basket size within the category",d:"Grout and adhesives extend the basket marginally — but they do not create meaningful differentiation, drive visit frequency, or open new revenue streams for your business."},
+      {t:"High capital deployed for slow inventory rotation",d:"Tile stocking demands significant floor space and working capital, while inventory turns remain slow. The return on capital deployed in tiles compares poorly to fast-moving, margin-rich categories like paint."}
+    ],
+    solutions:[
+      {t:"Every tile customer immediately becomes a paint customer",d:"The construction sequence is fixed — tiles are laid, then walls are painted. Every tile buyer at your counter is an imminent paint buyer. By stocking Berger, you capture the next logical purchase before your customer walks to a competitor."},
+      {t:"Paint turns one-time buyers into long-term, returning customers",d:"Unlike tiles, paint is refreshed every 5 to 7 years. A customer you bring to Berger today becomes a returning customer for decades — fundamentally transforming the lifetime value of your existing client base."},
+      {t:"Immediately increase revenue per customer without new acquisition cost",d:"Add a Berger paint recommendation alongside every tile transaction — interior emulsion, exterior paint, wall putty, waterproofing. Your average transaction value grows from the very first pitch, at zero additional acquisition cost."},
+      {t:"A space-efficient, fast-turning, high-margin business model",d:"A Berger counter equipped with the CB Machine occupies minimal floor space, turns inventory rapidly, and generates materially higher margin per square foot than your tile stocking area."}
+    ]
+  },
+  steel:{
+    pains:[
+      {t:"Steel margins have been commoditised beyond recovery",d:"In a market where price discovery is instant and customers switch suppliers for the smallest cost difference, steel margins have reached a structural floor. Competing on price alone offers no path to sustainable profitability."},
+      {t:"A single transaction per project with no continuation",d:"Your customer's entire steel requirement is fulfilled in one purchase at the start of construction. You invest in the relationship and absorb all the service cost — for a single transaction that does not repeat until the next project."},
+      {t:"Revenue is entirely exposed to macro construction and policy cycles",d:"Steel demand is directly linked to infrastructure spending, housing policy, and interest rate cycles. Any deceleration in these factors translates immediately and disproportionately into lost revenue for your business."},
+      {t:"Revenue concentration risk in a few large accounts",d:"When a significant portion of your revenue is concentrated in a handful of large buyers, the loss of a single account creates an outsized impact. A diversified product portfolio protects you from this exposure."}
+    ],
+    solutions:[
+      {t:"Steel buyers occupy the most strategically valuable position in the paint funnel",d:"The construction sequence runs from foundation to steel to masonry to paint. Your customers initiate every building project — and every building project ends with paint. Berger enables you to participate in the full value chain, not just the first step."},
+      {t:"Paint delivers the recurring revenue model that steel cannot",d:"Steel is sold once per project cycle. Paint is sold at project completion and renewed every 5 to 7 years for every property. Adding Berger converts your one-time project buyers into a permanent, predictable, and growing income stream."},
+      {t:"A counter-cyclical revenue stream that stabilises your business",d:"When large-scale infrastructure activity slows, residential and commercial repainting continues independent of the cycle. Berger paint provides income that holds steady — or grows — precisely when steel demand weakens."},
+      {t:"Extend the commercial life of every client relationship",d:"Your builder, contractor, and developer relationships represent years of trust and investment. Berger enables you to serve these clients across the entire lifecycle of every project — from structural phase to final finish — deepening the relationship and maximising its commercial value."}
+    ]
+  }
+};
+
+/* ---- ASIAN BUCKET PITCH DATA ---- */
+var ASIAN_BUCKETS={
+  lt1cr:{
+    label:"Less than Rs 1 Crore",
+    pains:[
+      {t:"Spectra Fendeck — a premium product your customers want, but you cannot offer",d:"Asian Paints restricts Spectra Fendeck to select, higher-volume dealer tiers. At your current scale, you are unable to offer one of the market's most in-demand premium exterior products — sending customers who ask for it to a competitor who can."},
+      {t:"Not all shades available — losing customers on colour choices",d:"For dealers without a CRS (Critical Retail Sales) designation, a significant portion of the Asian Paints shade palette is inaccessible. Every time a customer asks for a shade you cannot offer, you lose the sale — and often the customer."},
+      {t:"No annual trips or recognition — your growth goes unacknowledged",d:"Annual performance recognition programmes and dealer travel incentives at Asian Paints are reserved for higher business tiers. At this scale, your contribution is commercially invisible — there is no structured acknowledgement of your growth or loyalty."},
+      {t:"No structured growth plan to help you move up",d:"Smaller Asian Paints dealers operate without a defined roadmap for growth. There is no structured business development support, no guided pathway to the next tier, and no investment by the company in helping you grow beyond your current position."}
+    ],
+    solutions:[
+      {t:"Berger card benefits are accessible from Rs 70 lakh — rewarding you from day one",d:"Unlike Asian Paints, where meaningful benefits begin only at significantly higher thresholds, Berger's dealer incentive programme activates from Rs 70 lakh in annual business — a threshold well within reach at your current scale."},
+      {t:"Full shade range, no restrictions — every customer request fulfilled",d:"As a Berger dealer, you have access to the complete Berger shade portfolio through the CB Machine — installed at your store. No shade restrictions, no customer walkouts, no lost sales due to colour unavailability."},
+      {t:"A clear, structured growth pathway with Berger from the start",d:"Berger provides structured business development support, periodic reviews, and a defined growth framework — so you are never left without direction. Your progress is tracked, supported, and rewarded at every stage."},
+      {t:"Your first year with Berger positions you better than years with Asian",d:"Berger's onboarding support, trade schemes, and painter engagement programmes are designed to build business momentum quickly — giving a new dealer partner the tools to grow faster and more profitably than staying at the current Asian Paints tier."}
+    ]
+  },
+  "1to3cr":{
+    label:"Rs 1 Crore to Rs 3 Crore",
+    pains:[
+      {t:"No annual tie-ups for PC or PPC Club — your loyalty goes unrewarded",d:"The Painter Club and Premium Painter Club programmes at Asian Paints are structured around higher-volume dealer thresholds. At the 1 to 3 crore level, you are excluded from these programmes — meaning the painters who buy from you receive no structured engagement or loyalty benefits, reducing their attachment to your counter."},
+      {t:"No structured plan to help you break through to the next growth tier",d:"Asian Paints dealers in the 1 to 3 crore bracket operate without a clearly defined plan to scale beyond it. Business development support is limited, and the company's investment in your individual growth is minimal."},
+      {t:"Growth potential is there — but the platform to unlock it is missing",d:"You have built a business of meaningful scale, but the tools, programmes, and support needed to convert that momentum into accelerated growth are not available to you at this tier with Asian Paints."}
+    ],
+    solutions:[
+      {t:"Berger's Lift and Win programme activates painter and contractor pull at your counter",d:"Unlike Asian's tier-restricted painter programmes, Berger's Lift and Win sell-out incentive is available across dealer scales — ensuring that painters and contractors buying from your counter are consistently engaged, rewarded, and retained."},
+      {t:"Berger invests in your growth — not just your volume",d:"Berger provides structured business development support, field engagement, and a defined growth architecture to help you move from 1-3 crore to the next level. You are a growth partner, not just a stocking point."},
+      {t:"Best-in-industry credit line — more working capital to drive higher turnover",d:"Berger's credit terms are among the most competitive in the industry — freeing up working capital that you can redeploy into higher stock, wider assortment, and greater customer service capability, all of which directly translate into higher turnover."}
+    ]
+  },
+  "3to6cr":{
+    label:"Rs 3 Crore to Rs 6 Crore",
+    pains:[
+      {t:"Profitability is under pressure — margins are not keeping pace with your scale",d:"At 3 to 6 crore, you carry the operational complexity of a large dealer but the margin structure of a mid-tier partner. Profitability concerns are real, visible, and growing — the business scale demands better economics than Asian Paints is currently offering."},
+      {t:"Account reconciliation is increasingly complex on high-volume products",d:"At this turnover level, the volume of high-value transactions makes account reconciliation a significant operational burden. Disputes, delayed credit notes, and complex scheme calculations consume management time and obscure true profitability."},
+      {t:"No structured growth plan to move you into the premier tier",d:"Despite your scale, Asian Paints does not offer a clearly defined, supported pathway to help 3 to 6 crore dealers break into the top tier. You are left to find that growth largely on your own."},
+      {t:"The same benefit structure as a 3 crore dealer — despite being twice their size",d:"Asian Paints applies the same programme structure and benefit level to dealers ranging from 3 crore to 6 crore — irrespective of where within that range your business sits. A dealer doing 6 crore receives no differentiated recognition or reward versus one doing 3 crore."}
+    ],
+    solutions:[
+      {t:"Berger's margin structure is built to reward your scale",d:"At 3 to 6 crore, you deserve margin economics that reflect your volume and commitment. Berger's dealer margin structure and trade incentive programmes are designed to deliver superior profitability at exactly this level of business — making every crore of turnover more profitable than it is with Asian Paints."},
+      {t:"Simplified, transparent scheme structure — no reconciliation complexity",d:"Berger's scheme architecture is designed to be clear, single-page, and easy to compute — reducing reconciliation effort, improving cash flow predictability, and allowing you to focus on growing the business rather than managing paperwork."},
+      {t:"A defined pathway to Berger's premier dealer tier — with real support behind it",d:"Berger provides structured business development reviews, field engagement, and a clear framework to help high-performing dealers at this scale move into the company's premier partnership tier — with active support, not just a target number."}
+    ]
+  },
+  gt6cr:{
+    label:"Greater than Rs 6 Crore",
+    pains:[
+      {t:"Margin compression at scale — the rate gap is no longer worth the volume",d:"At over 6 crore, the incremental margin benefit from Asian Paints' volume structures has effectively narrowed. The rate gap between what you earn and what you could earn with a comparable commitment to another leading brand is no longer negligible — it is a material profitability gap."},
+      {t:"No meaningful upside from accessories — a high-margin category left on the table",d:"Accessories represent one of the highest-margin segments in the paint distribution business. Asian Paints' accessories portfolio and the earnings available through it at your tier do not reflect the scale of business you bring to the partnership."},
+      {t:"No structured growth plan commensurate with your contribution",d:"Despite operating at over 6 crore, you are not receiving a structured, invested growth plan from Asian Paints. A dealer of your scale deserves a strategic business review, a defined next milestone, and company resources actively working to help you grow."},
+      {t:"Profitability concerns are becoming impossible to ignore",d:"The combination of compressed margins, limited accessories upside, and the absence of a differentiated benefit structure at the highest dealer tiers means that profitability at this scale is under real and measurable pressure."}
+    ],
+    solutions:[
+      {t:"Berger's commercial proposition for premier dealers is significantly more attractive",d:"A dealer with over 6 crore in annual business commands Berger's highest-tier margin structure, dedicated trade schemes, and priority engagement — delivering a materially better P&amp;L than Asian Paints' current commercial offering at this scale."},
+      {t:"Accessories earnings are a real, structured income stream at Berger",d:"Berger's accessories portfolio — construction chemicals, waterproofing, wood coatings — carries strong margins and high demand. At your scale, this represents a significant incremental earnings opportunity that Asian Paints' current structure is not delivering for you."},
+      {t:"Berger's premier dealer partnership is built for your level of business",d:"Dealers at your scale are Berger's most strategic partners. You receive structured business reviews, senior engagement, co-investment in local demand generation, and a partnership model that reflects what a over 6 crore commitment genuinely deserves."},
+      {t:"Protect your profitability now — before margin pressure becomes irreversible",d:"The window to transition on your own terms — with your existing customer base, your infrastructure, and your market equity — is open today. Berger offers the commercial structure, brand strength, and growth support to ensure that transition delivers an immediate and lasting improvement in your bottom line."}
+    ]
+  }
+};
+
+/* ---- COMPETITION PITCH DATA ---- */
+var COMP={
+  asian:{
+    label:"Asian Paints",
+    pains:[
+      {t:"Exclusivity trap — too many dealers, not enough margin to go around",d:"Asian Paints appoints multiple dealers within the same geography, creating direct price competition within its own network. You are systematically pressured to undercut fellow dealers to retain customers — a dynamic that erodes margins for every partner in the market."},
+      {t:"Credit terms that constrain your ability to scale",d:"Asian Paints operates on one of the tighter credit cycles in the industry, limiting your working capital flexibility and restricting the volume and assortment you can maintain at any given time."},
+      {t:"Product exclusivity and differentiation reserved for the largest dealers",d:"Exclusive product access arrangements and formal territory protections at Asian Paints are concentrated among the highest-volume dealers. Mid-scale dealers operate without competitive differentiation — every counter in your market has access to the same products on the same terms."},
+      {t:"Secondary sales support is inconsistent and inadequate",d:"Reliable, regular secondary sales activity — painter engagement, contractor meets, local demand generation — is not consistently delivered across the network. Your counter is largely left to sustain its own pull without structured company support."}
+    ],
+    solutions:[
+      {t:"Berger card benefits begin at Rs 70 lakh — meaningful rewards at your current scale",d:"Berger's dealer incentive programme activates from Rs 70 lakh in annual business — a fraction of Asian Paints' threshold. You begin earning structured rewards, recognition, and programme benefits immediately, at the scale you are operating at today."},
+      {t:"Best-in-industry credit terms — superior working capital for business growth",d:"Berger's credit line is among the most competitive in the paint industry — giving you the financial flexibility to stock confidently, serve more customers, and reinvest in your business growth without the constraints that tighter credit cycles impose."},
+      {t:"Equal commercial opportunity — every Berger dealer partner is invested in",d:"Berger's commercial model is built on the principle that every dealer partner, regardless of current size, deserves equal access to products, programmes, and growth support. There is no artificial hierarchy that benefits the largest at the expense of the rest."},
+      {t:"India's highest spender on painter and contractor engagement",d:"Berger leads the industry in investment in painter incentive programmes, DBT payouts, and sell-out activities. This translates into consistent, company-funded secondary demand generation at your counter — every month, not just during seasonal campaigns."},
+      {t:"Structured field sales support across all key verticals",d:"Berger extends organised field sales support in Wood Coating, Projects, and Influencer Management to build sustained market demand — ensuring your counter benefits from a business development infrastructure that Asian Paints' network model does not replicate."}
+    ]
+  },
+  nerolac:{
+    label:"Nerolac",
+    pains:[
+      {t:"Underinvestment in painter engagement is weakening secondary demand",d:"The paint business is built on the loyalty of painters and applicators. Nerolac's relatively lower investment in painter incentive and engagement programmes has created a gap in secondary pull at the counter — a gap that better-invested brands are actively exploiting."},
+      {t:"Late entry into high-growth product categories is costing you sales",d:"Nerolac's delayed expansion into construction chemicals, wood coatings, and technology-enabled painting services has left meaningful gaps in your product offering. These are categories your customers are actively seeking — and currently buying from competitors."},
+      {t:"Selective demand — only a few products drive actual sales",d:"In practice, customer pull at a Nerolac counter is concentrated in primers, putty, and a handful of emulsion products. The premium and specialty segments — where margins are highest and brand differentiation is greatest — do not generate meaningful demand for Nerolac dealers."},
+      {t:"Waterproofing — the market's fastest-growing category — is a weak point",d:"Nerolac's late entry into the waterproofing segment means limited brand recognition and low demand pull in one of the paint industry's most rapidly growing, high-margin categories. Customers who come to your counter with waterproofing requirements frequently leave without buying."},
+      {t:"Limited retail dealer penetration — difficult to build scale",d:"Nerolac's retail dealer network remains relatively thin in many markets, limiting your ability to benefit from brand momentum and making it harder to grow your business in an environment where network density and visibility matter."},
+      {t:"Very limited secondary sales support",d:"Consistent, structured secondary sales activity is largely absent for Nerolac dealers. Without regular company-sponsored painter programmes, contractor engagement, and demand generation, your counter growth depends entirely on your own effort."}
+    ],
+    solutions:[
+      {t:"Berger leads the industry in product innovation and category breadth",d:"From Easy Clean and Anti Dust to Elasto waterproofing and Express Painting services, Berger brings a wide, high-demand product range with genuine brand pull across every segment — interior, exterior, wood, waterproofing, and construction chemicals."},
+      {t:"India's strongest painter and contractor engagement ecosystem",d:"Berger is the industry's highest investor in painter incentive programmes — DBT payouts, Lift and Win sell-outs, and structured contractor engagement that generate consistent, measurable secondary demand at your counter every month."},
+      {t:"A complete, strongly recalled waterproofing portfolio",d:"Berger's waterproofing range — SOP, Elasto, Weathercoat, Waterproof Putty — is comprehensive, nationally established, and actively demanded by contractors. From day one, you will convert waterproofing enquiries into confirmed sales."},
+      {t:"Full-service business development support across all growth verticals",d:"Berger provides structured support across Wood Coating, Projects, and Influencer Management — delivering a complete demand generation ecosystem that Nerolac's current support model cannot match."}
+    ]
+  },
+  akzo:{
+    label:"Akzo Nobel (Dulux)",
+    pains:[
+      {t:"Akzo Nobel is strategically withdrawing from the Indian market",d:"Akzo Nobel has been progressively reducing its commitment to the Indian decorative paints market. For any dealer, this represents the most serious long-term risk possible — the prospect of being left with brand equity, customer relationships, and infrastructure tied to a company that may exit the market entirely."},
+      {t:"Post-JSW merger — larger JSW dealers receive preferential treatment",d:"Following the JSW-Akzo partnership, channel investment and commercial preference is visibly shifting towards large JSW-affiliated dealers. For non-JSW Akzo dealers, this creates a growing disparity in access, support, and commercial terms — threatening the sustainability of your competitive position."},
+      {t:"Your business standing as a direct dealer is structurally unclear",d:"Many Akzo Nobel dealers operate in a position that is closer to a sub-dealer or intermediary than a direct channel partner. This ambiguity weakens your negotiating position, your access to commercial terms, and your long-term standing within the company's distribution architecture."},
+      {t:"Dulux pricing is significantly above market operating price — customers walk out",d:"Dulux products are priced materially higher than the market operating price of comparable offerings from leading Indian brands. At the counter, this creates a consistent and damaging pattern — customers request a price, hear the Dulux number, and leave to buy elsewhere."},
+      {t:"Incomplete product range — customers go elsewhere for key categories",d:"Akzo Nobel's product portfolio has visible gaps, particularly in waterproofing and construction chemicals. These are high-demand, high-margin categories that your customers increasingly expect from a full-service paint dealer — and you are currently unable to fulfil them."},
+      {t:"Secondary sales support is project-dependent and structurally inconsistent",d:"Akzo Nobel's secondary sales investment is heavily skewed towards large projects and institutional clients. Retail dealer support — painter meets, contractor engagement, local demand generation — is infrequent and unpredictable, leaving your counter largely without company-driven pull."},
+      {t:"Product quality concerns are growing among contractors and applicators",d:"Field feedback from contractors and painters reflects growing concern about product consistency and quality relative to earlier standards — an issue that, once established in the market, is very difficult to reverse and directly impacts your counter's credibility."},
+      {t:"Distribution channels may be rationalised or closed in certain markets",d:"There are credible signals that Akzo Nobel may rationalise or close distribution in select markets as part of its India strategy review. As a dealer, this uncertainty represents an unacceptable business risk that demands proactive consideration."}
+    ],
+    solutions:[
+      {t:"Berger is accelerating in India — a long-term, committed growth partner",d:"Berger is India's second-largest paint company, with confirmed investments exceeding Rs 3,000 crore in fresh manufacturing capacity and infrastructure. Unlike Akzo Nobel, Berger is deepening its commitment to India — making it the most credible long-term partnership for a dealer seeking stability and growth.*"},
+      {t:"Full business dignity — a direct, structured, and respected dealer partnership",d:"At Berger, you are a direct channel partner with clear commercial terms, transparent programme structures, and a well-defined role within the distribution architecture. There is no ambiguity about your standing, and no secondary class of dealer treatment."},
+      {t:"Market-competitive pricing with superior dealer margin economics",d:"Berger's product pricing is aligned with market operating prices — removing the price objections that cost Akzo dealers sales at the counter — while delivering dealer margins that are materially superior to the industry average."},
+      {t:"A complete, high-demand product range across every segment",d:"Berger's portfolio spans interior, exterior, wood, waterproofing, and construction chemicals — with established, recalled brands in every category. You will be equipped to serve every customer requirement, without sending anyone elsewhere."},
+      {t:"Structured, consistent secondary sales support across all dealer tiers",d:"Berger's secondary sales investment — painter programmes, contractor engagement, Lift and Win sell-outs, IDEA initiatives — is deployed consistently across the dealer network, not just reserved for large project accounts."}
+    ]
+  },
+  opus:{
+    label:"Opus (Birla)",
+    pains:[
+      {t:"No brand pull — every sale is a push sale",d:"Opus is a new entrant with no established brand recognition among painters, contractors, or end consumers. As a dealer, you are operating in a pure push environment — investing significant time and effort to convince each customer, while dealers of established brands fulfil demand that arrives at the counter unprompted."},
+      {t:"In-bill discounts have been reduced — eroding effective margins",d:"In-bill discount structures for Opus dealers have been reduced, directly compressing effective dealer margins. The economic case for carrying Opus is weakening at precisely the moment when the brand most needs dealer commitment to build market presence."},
+      {t:"Free product schemes in the economy segment have been discontinued",d:"Free product schemes — a standard tool for driving volume in the mass and economy segment — have been withdrawn for Opus. In a category where price and scheme structures drive purchase decisions, this is a material competitive disadvantage."},
+      {t:"Scheme structures are complex and difficult to execute profitably",d:"Opus dealer schemes are structured in a way that is difficult to compute, track, and realise. The complexity reduces effective yield from schemes and creates a gap between the headline incentive and what dealers actually earn."},
+      {t:"Contractor input and engagement programmes have been scaled back",d:"Contractor engagement — the cornerstone of secondary demand generation in the paint business — has been significantly reduced under Opus. Without active contractor support, building counter pull in a market dominated by established brands becomes structurally very difficult."},
+      {t:"Dealer profitability is built on margin rate, not margin value",d:"Decent margin percentages on low turnover deliver limited absolute profitability. Without brand pull to drive volume, Opus dealer economics remain trapped — good rates on small numbers do not build a viable business."},
+      {t:"Dealer-level engagement is minimal — the company engages painters directly",d:"Opus conducts painter engagement through direct town-level meetings — bypassing the dealer in the process. This creates a real structural risk: painter loyalty that is built to the brand directly, not through your counter, weakening your position in the value chain."},
+      {t:"Predominantly economy product portfolio — premium segment remains largely absent",d:"The Opus product range that actually moves at the retail level is concentrated in economy emulsions and primers — the lowest-margin segment of the paint portfolio. The premium and specialty segments, where real dealer profitability lies, do not generate meaningful Opus demand."},
+      {t:"DPL difference has narrowed — the pricing advantage is no longer significant",d:"The price difference between Opus and established brands has compressed to a point where it no longer represents a compelling reason for price-sensitive customers to choose Opus. The single competitive proposition the brand offered is eroding."},
+      {t:"CB machine offer has been withdrawn — a key dealer acquisition tool removed",d:"The offer of a complimentary Colour Bank tinting machine — one of the primary tools used to recruit and anchor new dealers — has been revoked. This signals a reduction in the company's commitment to building its dealer network through investment."}
+    ],
+    solutions:[
+      {t:"Berger carries 8 to 10 established power brands — customers walk in and ask for them by name",d:"WeatherCoat, Easy Clean, Elasto, Breatheasy, WoodKeeper and others — Berger's brand portfolio commands genuine market pull across every segment and price point. Your counter becomes a destination, not a place customers visit only when their preferred brand is unavailable."},
+      {t:"Berger dealers achieve over 50% ROI — volume and margin working together",d:"Sustainable dealer profitability comes from the combination of strong margins and high turnover. Berger's market-established brands drive the volume that makes strong margin rates translate into real, compounding wealth — not just attractive percentages on low numbers.*"},
+      {t:"Berger invests the highest in painter demand generation in the industry",d:"Berger allocates approximately 6% of revenue to painter activity and secondary demand programmes — the highest investment level in the industry. This creates a sustained flow of painter-driven demand at your counter, funded and managed by Berger, not dependent on your own effort alone.*"},
+      {t:"A complete, trusted waterproofing portfolio — capturing a fast-growing, high-margin category",d:"Berger's waterproofing range — SOP, Elasto, Weathercoat, Waterproof Putty — is comprehensive, contractor-trusted, and actively demanded. You will immediately capture the waterproofing segment that Opus is structurally unable to fulfil for your customers."},
+      {t:"Simple, transparent, single-page scheme structure — what you see is what you earn",d:"Berger's trade scheme architecture is designed to be clear, easy to compute, and straightforward to realise. No complexity, no reconciliation disputes, no gap between the headline number and your actual earnings."},
+      {t:"The CB Machine — Berger's commitment to your counter's success",d:"Berger installs the CB Machine at your store — a proven tool for attracting new customers, enabling personalised colour solutions, and differentiating your counter in any market. Unlike Opus, Berger backs this investment with a refund scheme (confirm eligibility with your Berger manager)."}
+    ]
+  }
+};
+
+/* ---- UTILITY FUNCTIONS ---- */
+function setMode(m){
+  MODE=m;
+  document.getElementById('mode-adc').classList.toggle('active',m==='adc');
+  document.getElementById('mode-comp').classList.toggle('active',m==='comp');
+  document.getElementById('adc-fields').style.display=m==='adc'?'block':'none';
+  document.getElementById('comp-fields').style.display=m==='comp'?'block':'none';
+}
+
+function onBrandChange(){
+  var b=document.getElementById('cbrand').value;
+  var w=document.getElementById('asian-turnover-wrap');
+  w.style.display=b==='asian'?'block':'none';
+  if(b==='asian') document.getElementById('asian-bucket-info').style.display='block';
+}
+
+function doLogin(){
+  var e=document.getElementById('login-email').value.trim().toLowerCase();
+  var n=document.getElementById('login-name').value.trim();
+  var empid=document.getElementById('login-empid').value.trim();
+  var tty=document.getElementById('login-tty').value.trim();
+  var depot=document.getElementById('login-depot').value.trim();
+  var err=document.getElementById('login-err');
+  if(!e.endsWith('@bergerindia.com')||e.length<17){err.style.display='block';return;}
+  if(!n){err.textContent='Please enter your full name.';err.style.display='block';return;}
+  err.style.display='none';
+  document.getElementById('udname').textContent=n;
+  document.getElementById('udemail').textContent=e+(depot?' | '+depot:'');
+  G.officer=n;G.email=e;G.empId=empid;G.depot=depot;G.tty=tty;
+  G.loginTime=new Date().toISOString();
+  document.getElementById('login-view').style.display='none';
+  document.getElementById('app-view').style.display='block';
+}
+
+function doLogout(){
+  document.getElementById('login-email').value='';
+  document.getElementById('login-name').value='';
+  document.getElementById('login-empid').value='';
+  document.getElementById('login-tty').value='';
+  document.getElementById('login-depot').value='';
+  document.getElementById('app-view').style.display='none';
+  document.getElementById('output').style.display='none';
+  document.getElementById('form-view').style.display='block';
+  document.getElementById('login-view').style.display='block';
+}
+
+function updateVolLabel(){
+  var t=document.getElementById('dtype').value;
+  document.getElementById('vol-label').textContent={cement:'Monthly cement sales (tons)',tile:'Monthly tile sales (boxes)',steel:'Monthly steel sales (tons)'}[t];
+}
+
+function fL(n){return 'Rs '+parseFloat((n/100000).toFixed(2)).toLocaleString('en-IN')+' lakh';}
+function fS(n){return Math.round(n).toLocaleString('en-IN')+' sq ft';}
+
+function sw(id,btn,mode){
+  document.querySelectorAll('.pane').forEach(function(p){p.classList.remove('active');});
+  var tbl=document.getElementById(mode==='comp'?'tabs-comp':'tabs-adc');
+  tbl.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
+  document.getElementById('pane-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function goBack(){
+  document.getElementById('output').style.display='none';
+  document.getElementById('form-view').style.display='block';
+}
+
+function toast(msg){
+  var t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show');},2800);
+}
+
+
+
+
+/* ---- USAGE LOGGING ---- */
+/* ================================================================
+   GOOGLE SHEETS LOGGING — UNLIMITED, FREE, SILENT
+   One-time setup: follow the setup guide provided, then paste
+   your Google Apps Script Web App URL below (keep single quotes)
+   ================================================================ */
+var SHEET_URL='PASTE_YOUR_SCRIPT_URL_HERE';
+
+function logSession(type){
+  if(!SHEET_URL||SHEET_URL==='PASTE_YOUR_SCRIPT_URL_HERE') return;
+  if(type!=='pitch') return;
+  try{
+    var d=new Date();
+    var payload={
+      log_date:      d.getDate()+'/'+(d.getMonth()+1)+'/'+d.getFullYear(),
+      log_time:      d.getHours()+':'+String(d.getMinutes()).padStart(2,'0'),
+      officer_name:  G.officer||'',
+      officer_email: G.email||'',
+      employee_id:   G.empId||'',
+      depot:         G.depot||'',
+      tty:           G.tty||'',
+      dealer_name:   G.dealerName||G.compDealerName||'',
+      dealer_type:   G.dtype?{cement:'Cement Dealer',tile:'Tile Dealer',steel:'Steel Dealer'}[G.dtype]:(G.compBrandLabel||''),
+      mode:          MODE==='adc'?'ADC Dealer':'Competition Dealer',
+      brand:         MODE==='comp'?(G.compBrandLabel||''):'--',
+      asian_bucket:  MODE==='comp'&&G.compBrand==='asian'?(G.asianBucket||''):'--',
+      city:          G.city||G.compCity||'',
+      tier:          G.tier||G.compTier||'',
+      annual_pot:    G.annualPot?'Rs '+Math.round(parseFloat(G.annualPot)/100000)+' lakh':'--'
+    };
+    // Build query string — GET request bypasses CORS completely
+    var qs=Object.keys(payload).map(function(k){
+      return encodeURIComponent(k)+'='+encodeURIComponent(payload[k]);
+    }).join('&');
+    var img=new Image();
+    img.src=SHEET_URL+'?'+qs;
+    // Also try fetch as backup
+    fetch(SHEET_URL+'?'+qs,{method:'GET',mode:'no-cors'}).catch(function(){});
+  }catch(e){}
+}
+
+function escH(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+/* ---- PITCH HTML BUILDERS ---- */
+function buildPitchSection(painTitle,solTitle,pains,solutions,showDisclaimer){
+  var h='<div class="pain-banner"><div class="pain-title">'+painTitle+'</div>';
+  pains.forEach(function(i){h+='<div class="pain-item"><div class="pdot"></div><div class="ptext"><strong>'+i.t+'</strong><br>'+i.d+'</div></div>';});
+  h+='</div><div class="solution-banner"><div class="solution-title">'+solTitle+'</div>';
+  solutions.forEach(function(i){h+='<div class="solution-item"><div class="sdot"></div><div class="stext"><strong>'+i.t+'</strong><br>'+i.d+'</div></div>';});
+  h+='</div>';
+  if(showDisclaimer) h+='<div class="notebox">*Source: Berger Paints corporate communications and annual reports. Individual dealer outcomes may vary. Programme details subject to confirmation with your Berger territory manager.</div>';
+  return h;
+}
+
+function resetOutput(mode){
+  document.querySelectorAll('.pane').forEach(function(p){p.classList.remove('active');});
+  document.getElementById('tabs-adc').style.display=mode==='adc'?'flex':'none';
+  document.getElementById('tabs-comp').style.display=mode==='comp'?'flex':'none';
+  document.getElementById('tabs-adc').querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
+  document.getElementById('tabs-comp').querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
+  if(mode==='adc'){document.getElementById('pane-potential').classList.add('active');document.getElementById('tabs-adc').querySelectorAll('.tab')[0].classList.add('active');}
+  else{document.getElementById('pane-comp-pitch').classList.add('active');document.getElementById('tabs-comp').querySelectorAll('.tab')[0].classList.add('active');}
+}
+
+/* ---- SHARE ---- */
+function buildShareTxt(){
+  if(MODE==='adc'){
+    var dl={cement:'Cement dealer',tile:'Tile dealer',steel:'Steel dealer'}[G.dtype];
+    return 'BERGER PAINTS - Dealer Pitch Proposal\nBy: '+G.officer+' ('+G.email+')\n\nDEALER: '+G.dealerName+'\n'+dl+' | '+G.city+'\n\nPAINT POTENTIAL\nCarpet area/month: '+fS(G.carpet)+'\nNew construction: '+fL(G.np)+'/mo\nRepainting (25%): '+fL(G.rp)+'/mo\nMonthly total: '+fL(G.tot)+'\nAnnual opportunity: '+fL(G.ann)+'\n\nWHY BERGER\n- 100+ yr legacy | #2 India | #4 Asia | #7 decorative globally\n- Highest dealer margins in industry\n- Best-in-industry credit line\n- 8-10 power brands with proven market pull\n- Loyalty: Lift & Win | Inspiration Club | Insignia Club | Legend Circle\n\n*Stats: bergerpaints.com';
+  } else {
+    return 'BERGER PAINTS - Dealer Conversion Pitch\nBy: '+G.officer+' ('+G.email+')\n\nDEALER: '+G.compDealerName+' | Current brand: '+G.compBrandLabel+'\n'+G.compCity+' | '+G.compTier+'\n\nWHY SWITCH TO BERGER\n- 100+ yr legacy | #2 India | #4 Asia | #7 decorative globally\n- Highest dealer margins in industry | Best-in-industry credit line\n- 8-10 power brands with proven market pull\n- Berger is Indias highest spender on painter programmes\n- Loyalty: Lift & Win | Inspiration Club | Insignia Club | Legend Circle\n\n*Stats: bergerpaints.com';
+  }
+}
+
+function shareWA(){window.open('https://wa.me/?text='+encodeURIComponent(buildShareTxt()),'_blank');}
+function copyTxt(){
+  var t=buildShareTxt();
+  if(navigator.clipboard){navigator.clipboard.writeText(t).then(function(){toast('Pitch copied to clipboard');});}
+  else{var ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);toast('Pitch copied to clipboard');}
+}
+function savePDF(){toast('Browser menu -> Print -> Save as PDF');}
+
+/* ---- ADC CALCULATE ---- */
+function calculateADC(){
+  var name=document.getElementById('dname').value.trim()||'Unnamed Dealer';
+  var dtype=document.getElementById('dtype').value;
+  var city=document.getElementById('dcity').value.trim()||'--';
+  var tier=document.getElementById('dtier').value;
+  var size=document.getElementById('dsize').value;
+  var vol=parseFloat(document.getElementById('vol').value)||0;
+  var ff=parseFloat(document.getElementById('footfall').value)||0;
+  var trn=parseFloat(document.getElementById('turnover').value)||0;
+  var pmix=document.getElementById('pmix').value;
+  var carpet,vunit,vml,beY,beM,npn;
+  if(dtype==='cement'){carpet=vol*65;vunit='tons/month';vml='Cement sold/month';beY='1 ton = 60-70 sq ft';beM='65 sq ft per ton (midpoint)';npn=Math.round(vol)+' tons x 65 sq ft x Rs 52/sq ft';document.getElementById('be-t1').textContent='Step 1 - Cement volume to carpet area';}
+  else if(dtype==='tile'){carpet=vol*16;vunit='boxes/month';vml='Tiles sold/month';beY='1 box = 16 sq ft';beM='16 sq ft per box';npn=Math.round(vol)+' boxes x 16 sq ft x Rs 52/sq ft';document.getElementById('be-t1').textContent='Step 1 - Tile volume to carpet area';}
+  else{carpet=vol*250;vunit='tons/month';vml='Steel sold/month';beY='1 ton = 250 sq ft';beM='250 sq ft per ton';npn=Math.round(vol)+' tons x 250 sq ft x Rs 52/sq ft';document.getElementById('be-t1').textContent='Step 1 - Steel volume to carpet area';}
+  var np=carpet*52,rp=np*0.25,tot=np+rp,ann=tot*12;
+  G=Object.assign(G,{dealerName:name,city:city,dtype:dtype,tier:tier,size:size,vol:vol,carpet:carpet,np:np,rp:rp,tot:tot,ann:ann,annualPot:ann});
+  var dl={cement:'Cement dealer',tile:'Tile dealer',steel:'Steel dealer'}[dtype];
+  document.getElementById('out-name').textContent=name;
+  document.getElementById('out-meta').innerHTML=dl+' &middot; '+city+' &middot; '+tier+' &middot; '+size+' store<br>Turnover: Rs '+trn.toFixed(1)+' lakh/mo &middot; Footfall: '+Math.round(ff)+'/day &middot; Mix: '+pmix+'<br>Pitch by: '+G.officer;
+  document.getElementById('vol-ml').textContent=vml;
+  document.getElementById('m-vol').textContent=Math.round(vol).toLocaleString('en-IN');
+  document.getElementById('m-volu').textContent=vunit;
+  document.getElementById('m-sqft').textContent=Math.round(carpet).toLocaleString('en-IN');
+  document.getElementById('m-np').textContent=fL(np);
+  document.getElementById('m-npn').textContent=npn;
+  document.getElementById('m-rp').textContent=fL(rp);
+  document.getElementById('m-tot').textContent=fL(tot);
+  document.getElementById('m-ann').textContent=fL(ann);
+  document.getElementById('be-y').textContent=beY;
+  document.getElementById('be-m').textContent=beM;
+  document.getElementById('be-v').textContent=Math.round(vol).toLocaleString('en-IN')+' '+vunit;
+  document.getElementById('be-c').textContent=fS(carpet);
+  document.getElementById('be-c2').textContent=fS(carpet);
+  document.getElementById('be-np').textContent=fL(np);
+  document.getElementById('be-nr').textContent=fL(np);
+  document.getElementById('be-rp').textContent=fL(rp);
+  document.getElementById('be-n2').textContent=fL(np);
+  document.getElementById('be-r2').textContent=fL(rp);
+  document.getElementById('be-tot').textContent=fL(tot);
+  document.getElementById('be-ann').textContent=fL(ann);
+  var p=ADC_PITCH[dtype];
+  document.getElementById('pitch-content').innerHTML=buildPitchSection('Challenges your business faces today','Why Berger paint is the ideal next step for your business',p.pains,p.solutions,false);
+  document.getElementById('pane-berger-adc').innerHTML=WHY_BERGER_HTML;
+  document.getElementById('form-view').style.display='none';
+  document.getElementById('output').style.display='block';
+  resetOutput('adc');
+  logSession('pitch');
+}
+
+/* ---- COMP CALCULATE ---- */
+function calculateComp(){
+  var cn=document.getElementById('cname').value.trim()||'Unnamed Dealer';
+  var cb=document.getElementById('cbrand').value;
+  var cc=document.getElementById('ccity').value.trim()||'--';
+  var ct=parseFloat(document.getElementById('cturnover').value)||0;
+  var ctr=document.getElementById('ctier').value;
+  var bucket=document.getElementById('asian-bucket').value;
+  G=Object.assign(G,{compDealerName:cn,compBrand:cb,compBrandLabel:COMP[cb].label,compCity:cc,compTurnover:ct,compTier:ctr,asianBucket:bucket,annualPot:''});
+  document.getElementById('out-name').textContent=cn;
+  document.getElementById('out-meta').innerHTML='Current brand: '+COMP[cb].label+' &middot; '+cc+' &middot; '+ctr+(cb==='asian'?' &middot; Turnover: '+ASIAN_BUCKETS[bucket].label:'')+'<br>Monthly turnover: Rs '+ct.toFixed(1)+' lakh &middot; Pitch by: '+G.officer;
+  var pains,solutions;
+  if(cb==='asian'){
+    // Merge base Asian pains with bucket-specific pains
+    pains=COMP.asian.pains.concat(ASIAN_BUCKETS[bucket].pains);
+    solutions=COMP.asian.solutions.concat(ASIAN_BUCKETS[bucket].solutions);
+  } else {
+    pains=COMP[cb].pains;
+    solutions=COMP[cb].solutions;
+  }
+  document.getElementById('comp-pitch-content').innerHTML=buildPitchSection(
+    'What is holding back your business as a '+COMP[cb].label+' dealer',
+    'Why switching to Berger is the right business decision',
+    pains,solutions,true
+  );
+  document.getElementById('pane-berger-comp').innerHTML=WHY_BERGER_HTML;
+  document.getElementById('form-view').style.display='none';
+  document.getElementById('output').style.display='block';
+  resetOutput('comp');
+  logSession('pitch');
+}
+
+/* ---- INIT ---- */
+updateVolLabel();
+onBrandChange();
+</script>
+</body>
+</html>
